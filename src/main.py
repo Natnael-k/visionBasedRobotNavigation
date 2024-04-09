@@ -28,28 +28,31 @@ class FSM_Controller:
         Robot_Arm_Control.move_robot_home()
         
         while True:
+            
             ret, frame = cap.read()
             if not ret:
                 break
             
             if self.state == "searching":
+                
                 # Search for object of interest
-                object_detected, object = self.object_detector.detect_object_of_interest(frame)
+                object_detected, bbox = self.object_detector.detect_object_of_interest(frame)
                 if object_detected:
                     self.state = "tracking"
                     break
             
             elif self.state == "tracking":
-                # Track the detected object
-                object_pose = obj['pose']  # Get object pose
-                object_bbox = obj['bbox']  # Get object bounding box
-                # Implement depth estimation
-                # Estimate object speed
-                # Perform visual servoing to adjust robot arm motion
-                control_signal = self.visual_servoing_controller.compute_control_signal(current_pose, desired_pose)
-                self.robot_arm_controller.move_to_pose(object_pose)
                 
-                if object_in_grab_zone():
+                # initialise object tracking
+                self.object_Tracking.start_tracking(frame, bbox)
+                # Implement Speed estimation
+                centroid, self.speed = Object_Tracking.update(frame)
+                # Perform Depth Estimation
+                # Perform visual servoing to adjust robot arm motion
+                control_signal = self.visual_servoing_controller.compute_control_signal(centroid, bbox)
+                self.robot_arm_controller.move_to_pose(centroid)
+                
+                if self.robot_arm_controller.object_in_grab_zone():
                     self.state = "picking"
             
             elif self.state == "picking":
@@ -70,7 +73,7 @@ class FSM_Controller:
         cv2.destroyAllWindows()
 
 def main():
-    fsm = FSM()
+    fsm = FSM_Controller()
     fsm.run()
 
 if __name__ == "__main__":
