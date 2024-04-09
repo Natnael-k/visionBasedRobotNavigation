@@ -37,7 +37,7 @@ class FSM_Controller:
                 object_detected, object = self.object_detector.detect_object_of_interest(frame)
                 if object_detected:
                     self.state = "tracking"
-                        break
+                    break
             
             elif self.state == "tracking":
                 # Track the detected object
