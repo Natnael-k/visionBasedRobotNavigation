@@ -1,18 +1,25 @@
+from epson_robot_connector import EpsonRobotController
+
 class RobotArmController:
     
     def __init__(self):
         # Initialize robot arm controller
+        self.robotconnctor = EpsonRobotController()
         pass
     
-    def move_to_pose(self, pose):
+    def move_to_pose_depth_detection(self, pose):
         # Move the robot arm to the specified pose
         pass
     
-    def grip_object(self):
+    def move_to_pose_speed_estim(self, pose):
+        # Move the robot arm to the specified pose
+        pass
+    
+    def grip_object(self, pose, grab_zone=False):
         # Perform gripping action
         pass
     
-    def release_object(self):
+    def release_object(self, pose):
         # Perform releasing action
         pass
     
