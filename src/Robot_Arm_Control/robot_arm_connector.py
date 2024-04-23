@@ -1,36 +1,33 @@
-from epson_robot_connector import EpsonRobotController
+from Robot_Arm_Control import EpsonRobotController
 
 class RobotArmController:
     
     def __init__(self):
         # Initialize robot arm controller
-        self.robotconnctor = EpsonRobotController()
-        pass
-    
-    def move_to_pose_depth_detection(self, pose):
-        # Move the robot arm to the specified pose
-        pass
-    
-    def move_to_pose_speed_estim(self, pose):
-        # Move the robot arm to the specified pose
+        self.robot_connctor = EpsonRobotController("127.0.0.1", 2001)
         pass
     
     def grip_object(self, pose, grab_zone=False):
         # Perform gripping action
+        if grab_zone:
+            self.robot_connctor.grip("open")
         pass
     
-    def release_object(self, pose):
+    def release_object(self, drop_zone=False):
         # Perform releasing action
+        if drop_zone:
+            self.robot_connctor.grip("open")
         pass
     
-    def move_to_home(self, pose):
+    def move_to_home(self, home_pose):
         # Move the robot to home position where and wait for detection
+        x , y , z = home_pose
+        self.robot_connector.go(x, y, z, 0)
         pass
     
-    def tracking(self, pose):
+    def tracking(self, error_pose):
         #visual servoing
+        x , y , z = error_pose
+        self.robot_connector.go(x, y, z, 0)
         pass
     
-    def object_in_grab_zone(self, depth, error ):
-        #is object in grab zone
-        pass
